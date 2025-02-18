@@ -38,36 +38,8 @@ const Nav = () => {
 
   return (
     <>
-      <nav className="flex flex-[1] items-center justify-end overflow-hidden">
-        <div className="hidden justify-end md:flex">
-          <NavLinks />
-        </div>
-        <div>
-          <ThemeToggle />
-        </div>
-        {/* <div className="flex w-[75px] justify-end md:hidden">
-          <button onClick={toggleNavbar}>{isOpen ? <X /> : <Menu />}</button>
-        </div> */}
-        
-      </nav>
-      <AnimatePresence mode="wait">
-        {isOpen && (
-          <motion.div
-            layout="position"
-            key="nav-links"
-            variants={mobileNavContainerVariant}
-            initial="hidden"
-            animate="show"
-            className="mt-4 basis-full md:hidden"
-          >
-            <motion.div variants={mobileNavListVariant} {...mobileNavExitProps}>
-              {/* <NavLink to="/" className={activeStyleCallback}>
-                Home
-              </NavLink> */}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      
+      
     </>
   );
 };

@@ -1,476 +1,143 @@
 import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import {
-  textVariants,
-  containerVariants,
-  imageLoadAnimationProps,
-} from "~/data/animationConfig";
+import {  motion } from "framer-motion";
 import { testimonials } from "~/data/testimonials";
-import Engagement from '../../public/assets/images/enagagement.jpeg';
-import Wedding from '../../public/assets/images/wedding1.jpg';
-import Haldi from '../../public/assets/images/haldi.jpg';
-import Reception from '../../public/assets/images/reception.jpeg';
-import PreWedding from '../../public/assets/images/wedding2.jpg';
-import WeddingBg from '../../public/assets/images/wedding-bg.jpg';
-
-const images = [
-  { src: Engagement, label: "Engagement" },
-  { src: Wedding, label: "Wedding" },
-  { src: Haldi, label: "Haldi" },
-  { src: Reception, label: "Reception" },
-  { src: PreWedding, label: "Pre-Wedding" },
-  { src: WeddingBg, lablel: "Background wedding image"}
-];
-const scrollingImages = [
-  { src: Engagement, label: "Engagement" },
-  { src: Wedding, label: "Wedding" },
-  { src: Haldi, label: "Haldi" },
-  { src: Reception, label: "Reception" },
-  { src: PreWedding, label: "Pre-Wedding" },
-  { src: WeddingBg, lablel: "Background wedding image"},
-  { src: Engagement, label: "Engagement" },
-  { src: Wedding, label: "Wedding" },
-  { src: Haldi, label: "Haldi" },
-  { src: Reception, label: "Reception" },
-  { src: PreWedding, label: "Pre-Wedding" },
-  { src: WeddingBg, lablel: "Background wedding image"}
-];
-
+import profilePhotot from '../../public/assets/images/me.jpg';
 import "./style.css";
-
-const bgImages = [Wedding, PreWedding, Haldi, Engagement];
+import { FaEnvelope, FaGithub, FaLinkedin, FaMoon, FaSun } from "react-icons/fa";
 
 export default function Index() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [currentBgImageIndex, setCurrentBgImageIndex] = useState(0);
-  // Automatically change the image every 5 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) =>
-        prevIndex === images.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 5000); // Change image every 5 seconds
+  const [darkMode, setDarkMode] = useState(true);
 
-    return () => clearInterval(interval); // Clean up the interval on component unmount
-  }, []);
-
-  useEffect(() => {
-    const intervalBg = setInterval(() => {
-      setCurrentBgImageIndex((prevIndex) => (prevIndex + 1) % bgImages.length);
-    }, 5000); // Change image every 3 seconds
-
-    return () => clearInterval(intervalBg); // Clean up the interval on unmount
-  }, []);
-
-  // Function to go to the next image
-  const nextImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  // Function to go to the previous image
-  const prevImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
-  };
-
-  const getImagePosition = (index:number) => {
-    if (index === currentImageIndex - 1 || (currentImageIndex === 0 && index === images.length - 1)) {
-      // Left image: tilted with the top left corner closer to the viewer
-      return 'transform -rotate-y-20 rotate-x-10 translate-x-[-110%] z-10 opacity-70 scale-85';
-    } else if (index === currentImageIndex) {
-      // Center image: highlighted, slightly zoomed in
-      return 'transform rotate-y-0 rotate-x-0 translate-x-0 z-20 scale-105 opacity-100';
-    } else if (index === currentImageIndex + 1 || (currentImageIndex === images.length - 1 && index === 0)) {
-      // Right image
-      return 'transform rotate-y-20 rotate-x-10 translate-x-[110%] z-10 opacity-70 scale-85';
-    } else {
-      // Other images: hidden or reset position
-      return 'hidden';
-    }
-  };  
-
-  const [animationPaused, setAnimationPaused] = useState(false);
-
-  useEffect(() => {
-    // Animation cycle: Move for 4s, then pause for 2s
-    const interval = setInterval(() => {
-      setAnimationPaused((prev) => !prev);
-    }, 1000); // Total cycle duration: 4s animation + 2s pause
-
-    return () => clearInterval(interval); // Cleanup interval on unmount
-  }, []);
-
-  const firstRowImages = scrollingImages.slice(0, 3); // First half of images
-  const secondRowImages = scrollingImages.slice(3); // Second half of images
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  const nextTestimonial = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-  };
-
-  const prevTestimonial = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length
-    );
-  };
-
-  const getPositionClass = (index: number) => {
-    const total = testimonials.length;
-    if (index === currentIndex) return "z-20 scale-100 opacity-100"; // Center card
-    if (index === (currentIndex - 1 + total) % total)
-      return "z-10 -translate-x-20 scale-90 opacity-50"; // Left card
-    if (index === (currentIndex + 1) % total)
-      return "z-10 translate-x-20 scale-90 opacity-50"; // Right card
-    return "opacity-0 pointer-events-none"; // Hidden card
-  };
-  
   return (
     <div>
-      <main className=" bg-white px-10 dark:bg-gray-900 md:px-20 lg:px-40">
-        <section className="min-h-screen">
-          
-          <div className="text-center p-10 py-10">
-            <h2 className="text-5xl py-2 text-teal-600 font-medium dark:text-teal-400 md:text-6xl">
-              Deekshith Kumar V
-            </h2>
-            <h3 className="text-2xl py-2 dark:text-white md:text-3xl">
-             Software Engineer
-            </h3>
-            <p className="text-md py-5 leading-8 text-gray-800 dark:text-gray-200 max-w-xl mx-auto md:text-xl">
-              Freelancer providing services for programming and design content
-              needs. Join me down below and let's get cracking!
-            </p>
-            <div className="text-5xl flex justify-center gap-16 py-3 text-gray-600 dark:text-gray-400">
-            <a href="https://www.instagram.com/mr._.d_k_v/" target="_blank">
-              {/* <AiFillInstagram /> */}
-            </a>
-            <a href="https://www.linkedin.com/in/deekshith-kumar-v-44a08321a/" target="_blank">
-               {/* <AiFillLinkedin /> */}
-            </a>
-            <a href="https://www.youtube.com/channel/UC1oJUHuYTmA-MUYBxPZX4sw" target="_blank">
-                {/* <AiFillYoutube /> */}
-            </a>
-            </div>
-
-            <div className="mx-auto bg-gradient-to-b from-teal-500 rounded-full w-80 h-80 relative overflow-hidden mt-20 md:h-96 md:w-96">
-              {/* <Image src={deved} layout="fill" objectFit="cover" /> */}
-            </div>
-          </div>
-        </section>
-        
-        
-      </main>
-    <div
-        className="relative h-screen w-screen flex items-center justify-center bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${bgImages[currentBgImageIndex]})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          transition: "background-image 1s ease-in-out",
-        }}
-      >
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="text-center"
-      >
-        <motion.h1
-          variants={textVariants}
-          className="mb-[0.5em] text-2xl font-bold leading-[1.3] md:text-4xl text-white"
+     <div className={darkMode ? "dark bg-gray-900 text-white" : "bg-white text-gray-900"}>
+    {/* Navbar Section */}
+    <nav className="fixed w-full top-0 left-0 bg-white dark:bg-gray-800 shadow-md p-4 flex justify-between items-center z-10">
+      <h1 className="font-burtons text-xl">Deekshith Kumar V</h1>
+      <div className="flex space-x-4 items-center">
+        {/* Dark Mode Toggle */}
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 shadow-md transition-all"
         >
-          Welcome to Nikhil Photography
-        </motion.h1>
-        <motion.p variants={textVariants} className="text-lg md:text-xl text-white">
-          Where we bring smiles with a small click
-        </motion.p>
-      </motion.div>
-    </div>
-
-    <div
-      className="relative h-screen w-screen flex items-center justify-center bg-cover bg-center transition duration-1000 ease-in-out"
-      >
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="text-center"
-      >
-        <motion.h1
-          variants={textVariants}
-          className="mb-[0.5em] text-2xl font-bold leading-[1.3] md:text-4xl text-black dark:text-white" // Set dark text for dark mode
-        >
-          Welcome to Nikhil Photography
-        </motion.h1>
-        <motion.p variants={textVariants} className="text-lg md:text-xl text-black dark:text-white">
-          some intro 
-        </motion.p>
-      </motion.div>
-    </div>
-
-
-    <div className="mx-0 my-[2em] flex min-h-[400px] flex-[1] items-center justify-center max-w-md:flex-col relative overflow-visible">
-  <div className="relative w-full h-[500px] flex items-center justify-center">
-    {/* Previous Button */}
-    <motion.button
-      whileTap={{ scale: 0.9 }}
-      whileHover={{ scale: 1.1 }}
-      onClick={prevImage}
-      className="absolute left-5 z-10 p-2 bg-gray-200 rounded-full shadow-md focus:outline-none active:bg-gray-300 dark:bg-gray-700 dark:text-white"
-    >
-      &#8249;
-    </motion.button>
-    
-    {/* Image Slideshow with Perspective */}
-    <div className="relative flex justify-center items-center h-[500px]" style={{ perspective: '1000px' }}>
-      {images.map((image, index) => (
-        <motion.div
-          key={index}
-          className={`absolute w-[350px] h-[500px] transition-transform duration-500 ease-in-out ${getImagePosition(index)}`}
-        >
-          <img
-            src={image.src}
-            alt={image.label}
-            className="object-cover w-full h-full shadow-lg"
-          />
-          {index === currentImageIndex && (
-            <motion.div
-              initial={{ opacity: 0, y: -30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="absolute top-5 left-5 text-lg font-bold text-white bg-black bg-opacity-60 px-4 py-1 rounded-br-lg"
-            >
-              {image.label}
-            </motion.div>
+          {darkMode ? (
+            <FaSun className="text-yellow-400 text-xl" />
+          ) : (
+            <FaMoon className="text-gray-900 text-xl" />
           )}
-        </motion.div>
-      ))}
-    </div>
+        </button>
 
-    {/* Next Button */}
-    <motion.button
-      whileTap={{ scale: 0.9 }}
-      whileHover={{ scale: 1.1 }}
-      onClick={nextImage}
-      className="absolute right-5 z-10 p-2 bg-gray-200 rounded-full shadow-md focus:outline-none active:bg-gray-300 dark:bg-gray-700 dark:text-white"
-    >
-      &#8250;
-    </motion.button>
-  </div>
-</div>
-  <section className="relative h-screen flex items-center justify-center bg-black dark:bg-white mt-16">
-      <div className="text-center">
-        <h3 className="text-3xl font-bold mb-4 text-white dark:text-black">WHY CHOOSE US</h3>
-        <p className="text-lg max-w-2xl mx-auto text-white dark:text-black">
-          We provide professional photography services for all your memorable occasions.
-        </p>
-      </div>
-    </section>
-<section className="relative h-[100vh] overflow-hidden mt-20">
-    <div
-      className="absolute top-0 left-0 w-full h-full bg-center bg-cover"
-      style={{
-        backgroundImage: `url(${Wedding})`,
-        backgroundAttachment: "fixed",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-      }}
-    >
-      <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-30"></div>
-    </div>
-    <div className="relative z-0 flex flex-col items-center justify-center h-full">
-      <h2 className="text-4xl font-bold text-white mb-4">Special Moments</h2>
-      <p className="text-lg text-white text-center max-w-2xl">
-        Capturing the beauty of every moment
-      </p>
-    </div>
-  </section>
-  
-  <section className="relative h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 py-10">
-
-  <div className="relative w-full max-w-7xl flex items-center justify-center">
-    {/* Previous Button */}
-    <motion.button
-      whileTap={{ scale: 0.9 }}
-      whileHover={{ scale: 1.2 }}
-      onClick={prevTestimonial}
-      className="absolute left-5 z-10 p-3 bg-gray-200 rounded-full shadow-md focus:outline-none active:bg-gray-300 dark:bg-gray-700 dark:text-white hover:bg-gray-300"
-    >
-      &#8249;
-    </motion.button>
-
-    {/* Testimonial Slideshow */}
-    <div
-      className="relative flex justify-center items-center w-full"
-      style={{ perspective: "1000px" }}
-    >
-      {testimonials.map((testimonial, index) => (
-        <motion.div
-          key={index}
-          className={`absolute w-[90%] md:w-[60%] lg:w-[40%] h-[200px] md:h-[250px] lg:h-[300px] bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg text-center transform transition-transform duration-500 ease-in-out ${getPositionClass(
-            index
-          )}`}
-          style={{
-            backdropFilter: index !== currentIndex ? "blur(5px)" : "none",
-          }}
+        {/* Resume Download Button */}
+        <a
+          href="/assets/DeekshithResume.pdf"
+          download="Deekshith_Kumar_Resume.pdf"
+          className="p-2 rounded-full bg-teal-500 text-white hover:bg-teal-600 transition-colors"
         >
-          <p className="text-sm md:text-base lg:text-lg italic mb-4 text-gray-800 dark:text-gray-200">
-            "{testimonial.feedback}"
-          </p>
-          <h4 className="text-base md:text-lg lg:text-xl font-bold text-gray-900 dark:text-white">
-            {testimonial.clientName}
-          </h4>
-          <p className="text-sm text-gray-600 dark:text-gray-400">{testimonial.location}</p>
-        </motion.div>
-      ))}
+          Download Resume
+        </a>
+      </div>
+    </nav>
+
+    {/* Hero Section */}
+    <div className="px-10 md:px-20 lg:px-40 min-h-screen flex flex-col items-center justify-center text-center">
+      <motion.h2
+        className="font-burtons text-5xl md:text-6xl font-medium text-teal-600 dark:text-teal-400 mt-0 md:mt-40"
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }} 
+        transition={{ duration: 1 }}
+      >
+        Deekshith Kumar V
+      </motion.h2>
+      <motion.h3
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="text-2xl md:text-3xl mt-4"
+      >
+        Software Engineer
+      </motion.h3>
+      <motion.p
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="text-md md:text-xl mt-6 max-w-xl"
+      >
+        Passionate about building scalable and efficient web applications.
+      </motion.p>
+
+      {/* Profile Image */}
+      <motion.div
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        className="mx-auto bg-gradient-to-b from-teal-500 rounded-full w-80 h-80 relative overflow-hidden mt-10 md:h-96 md:w-96"
+      >
+        <img src={profilePhotot} alt="Profile Image" className="w-full h-full object-cover" />
+      </motion.div>
+
+      {/* Social Links */}
+      <motion.div
+        className="flex space-x-6 mt-6"
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        <a href="https://www.linkedin.com/in/deekshith-kumar-v-44a08321a/" target="_blank" rel="noopener noreferrer">
+          <FaLinkedin className="text-3xl text-teal-500 hover:text-teal-400" />
+        </a>
+        <a href="https://github.com/deekshithkumarv" target="_blank" rel="noopener noreferrer">
+          <FaGithub className="text-3xl text-teal-500 hover:text-teal-400" />
+        </a>
+        <a href="mailto:vdeekshithkumar@example.com">
+          <FaEnvelope className="text-3xl text-teal-500 hover:text-teal-400" />
+        </a>
+      </motion.div>
     </div>
 
-    {/* Next Button */}
-    <motion.button
-      whileTap={{ scale: 0.9 }}
-      whileHover={{ scale: 1.2 }}
-      onClick={nextTestimonial}
-      className="absolute right-5 z-10 p-3 bg-gray-200 rounded-full shadow-md focus:outline-none active:bg-gray-300 dark:bg-gray-700 dark:text-white hover:bg-gray-300"
-    >
-      &#8250;
-    </motion.button>
-  </div>
-</section>
-
-  <div
-      style={{
-        overflow: "hidden",
-        position: "relative",
-        width: "100%",
-        height: "400px",
-        backgroundColor: "#f7f7f7",
-      }}
-    >
-      {/* First Row - Scroll Left */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          animation: "scrollLeft 20s linear infinite",
-          whiteSpace: "nowrap",
-          marginTop: "39px"
-        }}
-      >
-        {[...scrollingImages, ...scrollingImages].map((image, index) => (
-          <div
-            key={`row1-${index}`}
-            style={{
-              flex: "0 0 auto",
-              width: "200px",
-              height: "150px",
-              borderRadius: "8px",
-              overflow: "hidden",
-              margin: "0 10px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <img
-              src={image.src}
-              alt={image.label}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
-          </div>
+    {/* Skills Section */}
+    <div className="py-20 px-10 md:px-20 lg:px-40 bg-gray-100 dark:bg-gray-900">
+      <h3 className="text-3xl font-bold text-center">Skills</h3>
+      <div className="flex flex-wrap justify-center gap-6 mt-8">
+        {["React", "TypeScript", "Tailwind CSS", "Node.js", "ASP .Net"].map((skill, index) => (
+          <motion.div key={index} className="px-6 py-3 bg-gray-200 dark:bg-gray-800 rounded-lg shadow-md" whileHover={{ scale: 1.1 }}>
+            {skill}
+          </motion.div>
         ))}
       </div>
+    </div>
 
-      {/* Second Row - Scroll Right */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          animation: "scrollLeft 20s linear infinite reverse",
-          whiteSpace: "nowrap",
-          marginTop: "20px",
-        }}
-      >
-        {[...scrollingImages, ...scrollingImages].map((image, index) => (
-          <div
-            key={`row2-${index}`}
-            style={{
-              flex: "0 0 auto",
-              width: "200px",
-              height: "150px",
-              borderRadius: "8px",
-              overflow: "hidden",
-              margin: "0 10px",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <img
-              src={image.src}
-              alt={image.label}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
-          </div>
+    {/* Projects Section */}
+    <div className="py-20 px-10 md:px-20 lg:px-40 bg-gray-200 dark:bg-gray-800">
+      <h3 className="text-3xl font-bold text-center">Projects</h3>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+        {[
+          { title: "ERP System for a Manufacturing Firm", description: "This project was aimed at maintaining various head office and branch operations such as manufacturing, purchase, stock transfer, and sales" },
+          { title: "Grow-N-Know", description: "This website offers three different services that use machine learning to identify the best crops to produce, the fertilizers to use and potential disease your crops may have contracted." },
+          { title: "Messaging app", description: "Messaging app is an android based application. It’s a simple application where the user can send and view messages." },
+          { title: "CarWow", description: "CarWow is a web-based application that allows customers to check luxury cars availability, prices, specifications." }
+        ].map((project, index) => (
+          <motion.div key={index} className="p-6 bg-gray-300 dark:bg-gray-700 rounded-lg shadow-md" whileHover={{ scale: 1.05 }}>
+            <h4 className="text-xl font-bold">{project.title}</h4>
+            <p className="mt-2">{project.description}</p>
+          </motion.div>
         ))}
       </div>
-
-      {/* Add Keyframes CSS */}
-      <style>
-        {`
-          @keyframes scrollLeft {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(-100%);
-            }
-          }
-        `}
-      </style>
     </div>
 
-  <div
-      className="relative bg-cover bg-center min-h-screen flex items-center justify-center"
-    >
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black dark:bg-slate-500 bg-opacity-50"></div>
-
-  <div className="relative z-0 container mx-auto px-2 lg:px-16 flex flex-col lg:flex-row gap-y-6 lg:gap-y-0">
-  {/* Left Section */}
-  <div className="w-full lg:w-1/2 text-white text-center lg:text-left space-y-4">
-  {/* <div className="w-full lg:w-1/2 text-white text-center lg:text-right space-x-4 mt-6 lg:mt-0"> */}
-    <p className="text-3xl lg:text-5xl font-bold">Contact Us</p>
-    <p className="text-base lg:text-lg"> Email:{" "} nikhilstudio@gmail.com</p>
-    <p className="text-sm lg:text-lg italic">
-      Embark on Timeless Journeys,
-      <br />
-      Mangalore 575022
-    </p>
-  </div>
-  
-
-  {/* Right Section */}
-  <div className="w-full lg:w-1/2 text-white text-center lg:text-right space-y-4 mt-6 lg:mt-0">
-    <p className="text-3xl lg:text-5xl font-bold">+91 123456789</p>
-    <p className="text-base lg:text-lg">Reach us at the number above</p>
-    <p className="text-sm lg:text-lg italic">
-      Embark on Timeless Journeys,
-      <br />
-      Reach Out and Make Your Moments Last Forever.
-    </p>
-  </div>
-</div>
-
+    {/* Contact Section */}
+    <div className="py-20 px-10 md:px-20 lg:px-40 text-center bg-gray-100 dark:bg-gray-900">
+      <h3 className="text-3xl font-bold">Get in Touch</h3>
+      <p className="mt-4 max-w-xl mx-auto">Feel free to reach out for collaborations or just to connect.</p>
+      <a href="mailto:vdeekshithkumar@gmail.com" className="mt-6 inline-block px-6 py-3 bg-teal-500 text-white rounded-md shadow-md hover:bg-teal-600">
+        Contact Me
+      </a>
     </div>
-    
+
+    {/* Footer Section */}
+    <footer className="py-6 text-center bg-gray-200 dark:bg-gray-800">
+      &copy; 2025 Deekshith Kumar V. All Rights Reserved.
+    </footer>
+  </div>
     </div>
   );
 }
